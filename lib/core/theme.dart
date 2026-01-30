@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 // Thème centralisé, couleurs et typographie
 final Color kPrimary = const Color(0xFF0066FF);
-final Color kAccent = const Color(0xFF00DD88);
-final Color kNeutral = const Color(0xFFF5F5F5);
+final Color kNeutral = const Color(0xFFFFFFFF);
 
 ThemeData appTheme() {
-  final colorScheme = ColorScheme.fromSeed(seedColor: kPrimary, primary: kPrimary, secondary: kAccent);
+  final colorScheme = ColorScheme.fromSeed(seedColor: kPrimary, primary: kPrimary);
 
   return ThemeData(
     useMaterial3: true,
@@ -16,8 +15,8 @@ ThemeData appTheme() {
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      backgroundColor: Colors.transparent,
-      foregroundColor: colorScheme.onSurface,
+      backgroundColor: kNeutral,
+      foregroundColor: Colors.black,
     ),
 
     cardTheme: CardThemeData(

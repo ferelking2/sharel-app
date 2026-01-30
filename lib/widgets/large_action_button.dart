@@ -39,7 +39,7 @@ class _LargeActionButtonState extends State<LargeActionButton> {
                 color: primary,
                 shape: BoxShape.circle,
                 boxShadow: [
-                  BoxShadow(color: primary.withOpacity(0.18), blurRadius: 18, offset: const Offset(0, 8)),
+                  BoxShadow(color: primary.withAlpha(46), blurRadius: 18, offset: const Offset(0, 8)),
                 ],
               ),
               child: Icon(widget.icon, size: 36, color: Colors.white),

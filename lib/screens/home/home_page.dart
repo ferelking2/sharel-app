@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
-                                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 6)],
+                                boxShadow: [BoxShadow(color: Colors.black.withAlpha(8), blurRadius: 6)],
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            separatorBuilder: (_, __) => const SizedBox(width: 12),
+                            separatorBuilder: (_, _) => const SizedBox(width: 12),
                             itemCount: 4,
                           ),
                         )

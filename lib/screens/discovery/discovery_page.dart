@@ -24,7 +24,7 @@ class DiscoveryPage extends StatelessWidget {
           Expanded(
             child: ListView.separated(
               itemCount: mockDevices.length,
-              separatorBuilder: (_, __) => const Divider(height: 8),
+              separatorBuilder: (_, _) => const Divider(height: 8),
               itemBuilder: (context, index) {
                 final d = mockDevices[index];
                 return ListTile(
