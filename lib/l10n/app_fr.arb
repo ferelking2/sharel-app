@@ -1,10 +1,13 @@
 {
-  "appTitle": "SHAREL",
+  "appTitle": "SHAREit Lite",
   "@appTitle": {
     "description": "Nom de l'application"
   },
   "labelSend": "Envoyer",
   "labelReceive": "Recevoir",
   "labelFiles": "Fichiers",
-  "homeWelcome": "Bienvenue sur SHAREL"
+  "homeWelcome": "Bienvenue sur SHAREL",
+  "bottomNavHome": "Accueil",
+  "bottomNavDiscovery": "Découvrir",
+  "bottomNavMe": "Moi"
 }

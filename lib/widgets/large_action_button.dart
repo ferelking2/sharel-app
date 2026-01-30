@@ -33,16 +33,13 @@ class _LargeActionButtonState extends State<LargeActionButton> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 92,
-              height: 92,
+              width: 80,
+              height: 80,
               decoration: BoxDecoration(
                 color: primary,
                 shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(color: primary.withAlpha(46), blurRadius: 18, offset: const Offset(0, 8)),
-                ],
               ),
-              child: Icon(widget.icon, size: 36, color: Colors.white),
+              child: Icon(widget.icon, size: 32, color: Colors.white),
             ),
             const SizedBox(height: 8),
             Text(widget.label, style: TextStyle(fontWeight: FontWeight.w700, color: Colors.grey.shade800)),

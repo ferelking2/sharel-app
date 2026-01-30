@@ -97,7 +97,7 @@ abstract class AppLocalizations {
   /// Nom de l'application
   ///
   /// In fr, this message translates to:
-  /// **'SHAREL'**
+  /// **'SHAREit Lite'**
   String get appTitle;
 
   /// No description provided for @labelSend.
@@ -123,6 +123,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Bienvenue sur SHAREL'**
   String get homeWelcome;
+
+  /// No description provided for @bottomNavHome.
+  ///
+  /// In fr, this message translates to:
+  /// **'Accueil'**
+  String get bottomNavHome;
+
+  /// No description provided for @bottomNavDiscovery.
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvrir'**
+  String get bottomNavDiscovery;
+
+  /// No description provided for @bottomNavMe.
+  ///
+  /// In fr, this message translates to:
+  /// **'Moi'**
+  String get bottomNavMe;
 }
 
 class _AppLocalizationsDelegate

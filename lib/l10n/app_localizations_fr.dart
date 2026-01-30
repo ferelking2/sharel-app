@@ -9,7 +9,7 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
-  String get appTitle => 'SHAREL';
+  String get appTitle => 'SHAREit Lite';
 
   @override
   String get labelSend => 'Envoyer';
@@ -22,4 +22,13 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeWelcome => 'Bienvenue sur SHAREL';
+
+  @override
+  String get bottomNavHome => 'Accueil';
+
+  @override
+  String get bottomNavDiscovery => 'Découvrir';
+
+  @override
+  String get bottomNavMe => 'Moi';
 }
