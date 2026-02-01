@@ -16,6 +16,21 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 subprojects {
+    afterEvaluate {
+        if (project.hasProperty("android")) {
+            val android = project.extensions.getByName("android")
+            if (android is com.android.build.gradle.BaseExtension) {
+                if (android.namespace == null) {
+                    val defaultNamespace = "com.sharel.plugins.${project.name.replace("-", "_")}"
+                    android.namespace = defaultNamespace
+                    println("Setting namespace to $defaultNamespace for project ${project.name}")
+                }
+            }
+        }
+    }
+}
+
+subprojects {
     project.evaluationDependsOn(":app")
 }
 
