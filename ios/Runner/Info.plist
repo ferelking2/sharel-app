@@ -53,5 +53,13 @@
 	<string>Accès pour ajouter à la bibliothèque photo</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Accès à la musique pour partager</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Accès à la caméra pour scanner les codes QR</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Accès au réseau local pour découvrir et transférer des fichiers</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_sharel._tcp</string>
+	</array>
 </dict>
 </plist>

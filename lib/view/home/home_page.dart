@@ -137,7 +137,7 @@ class _HomeMainActions extends StatelessWidget {
           icon: Icons.download,
           label: t.labelReceive,
           color: theme.colorScheme.primary,
-          onTap: () => context.go('/receiver'),
+          onTap: () => context.go('/receive/preparation'),
         ),
         _CircleActionButton(
           icon: Icons.folder,
