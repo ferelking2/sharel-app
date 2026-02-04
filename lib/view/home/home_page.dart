@@ -15,28 +15,22 @@ class HomePage extends StatelessWidget {
         preferredSize: const Size.fromHeight(72),
         child: _HomeHeader(),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(AppTheme.spacing16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _HomeSearchBar(),
-                  const SizedBox(height: AppTheme.spacing24),
-                  _HomeMainActions(),
-                  const SizedBox(height: AppTheme.spacing24),
-                  _HomeVideoDownloaderCard(),
-                  const SizedBox(height: AppTheme.spacing16),
-                  _HomeCleanerCard(),
-                  const SizedBox(height: AppTheme.spacing16),
-                  _HomeMusicCard(),
-                ],
-              ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(AppTheme.spacing16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _HomeMainActions(),
+                const SizedBox(height: AppTheme.spacing32),
+                _HomeQuickStats(),
+                const SizedBox(height: AppTheme.spacing24),
+                _HomeRecentTransfers(),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
       bottomNavigationBar: _HomeBottomNav(),
     );
@@ -49,7 +43,10 @@ class _HomeHeader extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppTheme.spacing16, vertical: AppTheme.spacing12),
-      color: theme.colorScheme.surface,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        border: Border(bottom: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1))),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -63,51 +60,30 @@ class _HomeHeader extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(width: AppTheme.spacing8),
+              const SizedBox(width: AppTheme.spacing12),
               Container(
-                width: 32,
-                height: 32,
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.secondary,
+                  color: theme.colorScheme.primaryContainer,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.send, color: Colors.white, size: 20),
+                child: Icon(Icons.share, color: theme.colorScheme.onPrimaryContainer, size: 20),
               ),
             ],
           ),
           Row(
             children: [
-              Icon(Icons.chat, color: theme.colorScheme.primary, size: 28),
-              const SizedBox(width: AppTheme.spacing16),
-              InkWell(
-                onTap: () => context.go('/notification'),
-                child: Icon(Icons.notifications_none, color: theme.colorScheme.primary, size: 28),
+              IconButton(
+                icon: Icon(Icons.notifications_none, color: theme.colorScheme.primary),
+                onPressed: () => context.go('/notification'),
               ),
-              const SizedBox(width: AppTheme.spacing16),
-              Icon(Icons.add_circle_outline, color: theme.colorScheme.primary, size: 28),
+              IconButton(
+                icon: Icon(Icons.person, color: theme.colorScheme.primary),
+                onPressed: () => context.go('/me'),
+              ),
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _HomeSearchBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return TextField(
-      decoration: InputDecoration(
-        hintText: 'Rechercher...',
-        prefixIcon: Icon(Icons.search, color: theme.colorScheme.primary),
-        filled: true,
-        fillColor: theme.colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(vertical: AppTheme.spacing12),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radius),
-          borderSide: BorderSide.none,
-        ),
       ),
     );
   }
@@ -119,152 +95,151 @@ class _HomeMainActions extends StatelessWidget {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
     if (t == null) {
-      return const Padding(
-        padding: EdgeInsets.all(AppTheme.spacing24),
-        child: Center(child: CircularProgressIndicator()),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _CircleActionButton(
-          icon: Icons.send,
-          label: t.labelSend,
-          color: theme.colorScheme.primary,
-          onTap: () => context.go('/sender'),
-        ),
-        _CircleActionButton(
-          icon: Icons.download,
-          label: t.labelReceive,
-          color: theme.colorScheme.primary,
-          onTap: () => context.go('/receive/preparation'),
-        ),
-        _CircleActionButton(
-          icon: Icons.folder,
-          label: t.labelFiles,
-          color: theme.colorScheme.primary,
-          onTap: () => context.go('/files'),
-        ),
-      ],
-    );
-  }
-}
-
-class _CircleActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback? onTap;
-  const _CircleActionButton({required this.icon, required this.label, required this.color, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Material(
-          color: color,
-          shape: const CircleBorder(),
-          elevation: AppTheme.elevation,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(40),
-            onTap: onTap,
-            child: SizedBox(
-              width: 72,
-              height: 72,
-              child: Icon(icon, color: Colors.white, size: 36),
-            ),
-          ),
-        ),
-        const SizedBox(height: AppTheme.spacing8),
-        Text(label, style: Theme.of(context).textTheme.labelLarge),
-      ],
-    );
-  }
-}
-
-class _HomeVideoDownloaderCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppTheme.spacing16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        Text('Actions principales', style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.outline)),
+        const SizedBox(height: AppTheme.spacing16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text('TÉLÉCHARGEUR DE VIDÉO', style: theme.textTheme.titleLarge),
-            const SizedBox(height: AppTheme.spacing12),
-            Row(
-              children: [
-                _AppIconButton(icon: Icons.chat, label: 'WhatsApp'),
-                _AppIconButton(icon: Icons.camera_alt, label: 'Instagram'),
-                _AppIconButton(icon: Icons.facebook, label: 'Facebook'),
-                _AppIconButton(icon: Icons.tv, label: 'FB Watch'),
-                const Spacer(),
-                TextButton(onPressed: () {}, child: const Text('PLUS')),
-              ],
+            _ActionCard(
+              icon: Icons.cloud_upload,
+              label: t.labelSend,
+              color: theme.colorScheme.primary,
+              onTap: () => context.go('/sender'),
+            ),
+            _ActionCard(
+              icon: Icons.cloud_download,
+              label: t.labelReceive,
+              color: theme.colorScheme.secondary,
+              onTap: () => context.go('/receive/preparation'),
+            ),
+            _ActionCard(
+              icon: Icons.folder,
+              label: t.labelFiles,
+              color: theme.colorScheme.tertiary,
+              onTap: () => context.go('/files'),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }
 
-class _AppIconButton extends StatelessWidget {
+class _ActionCard extends StatelessWidget {
   final IconData icon;
   final String label;
-  const _AppIconButton({required this.icon, required this.label});
+  final Color color;
+  final VoidCallback onTap;
+
+  const _ActionCard({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: AppTheme.spacing12),
-      child: Column(
-        children: [
-          Material(
-            color: Theme.of(context).colorScheme.secondary,
-            shape: const CircleBorder(),
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: Icon(icon, color: Colors.white, size: 22),
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          elevation: 0,
+          color: color.withOpacity(0.08),
+          child: Padding(
+            padding: const EdgeInsets.all(AppTheme.spacing16),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: color, size: 28),
+                ),
+                const SizedBox(height: AppTheme.spacing12),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: AppTheme.spacing8),
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _HomeCleanerCard extends StatelessWidget {
+class _HomeQuickStats extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Statistiques', style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.outline)),
+        const SizedBox(height: AppTheme.spacing12),
+        Row(
+          children: [
+            Expanded(
+              child: _StatCard(
+                title: '0',
+                subtitle: 'Fichiers envoyés',
+                icon: Icons.check_circle_outline,
+              ),
+            ),
+            const SizedBox(width: AppTheme.spacing12),
+            Expanded(
+              child: _StatCard(
+                title: '0',
+                subtitle: 'Fichiers reçus',
+                icon: Icons.download_done,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  const _StatCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
+      elevation: 0,
+      color: theme.colorScheme.primaryContainer.withOpacity(0.3),
       child: Padding(
         padding: const EdgeInsets.all(AppTheme.spacing16),
         child: Row(
           children: [
-            CircularProgressIndicator(
-              value: 0.96,
-              color: theme.colorScheme.primary,
-              backgroundColor: theme.colorScheme.surface,
-            ),
-            const SizedBox(width: AppTheme.spacing16),
+            Icon(icon, color: theme.colorScheme.primary, size: 28),
+            const SizedBox(width: AppTheme.spacing12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('624KB nettoyés', style: theme.textTheme.titleLarge),
-                Text('50.51GB utilisés', style: theme.textTheme.bodyMedium),
+                Text(title, style: theme.textTheme.titleLarge),
+                Text(subtitle, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline)),
               ],
-            ),
-            const Spacer(),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('NETTOYER'),
             ),
           ],
         ),
@@ -273,73 +248,38 @@ class _HomeCleanerCard extends StatelessWidget {
   }
 }
 
-class _HomeMusicCard extends StatelessWidget {
+class _HomeRecentTransfers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppTheme.spacing16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.music_note, color: theme.colorScheme.primary, size: 32),
-                const SizedBox(width: AppTheme.spacing12),
-                Expanded(
-                  child: Text(
-                    "J'ai trouvé 122 de chansons que vous pouvez écouter en",
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.play_arrow),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.skip_next),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            const SizedBox(height: AppTheme.spacing12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _MusicActionButton(icon: Icons.download_done, label: 'Reçu'),
-                _MusicActionButton(icon: Icons.add, label: 'Ajouté'),
-                _MusicActionButton(icon: Icons.favorite, label: 'Favori'),
-                _MusicActionButton(icon: Icons.playlist_play, label: 'Liste de lecture'),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _MusicActionButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  const _MusicActionButton({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Material(
-          color: Theme.of(context).colorScheme.primary,
-          shape: const CircleBorder(),
-          child: SizedBox(
-            width: 36,
-            height: 36,
-            child: Icon(icon, color: Colors.white, size: 18),
+        Text('Transferts récents', style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.outline)),
+        const SizedBox(height: AppTheme.spacing12),
+        Card(
+          elevation: 0,
+          color: theme.colorScheme.surface,
+          child: Padding(
+            padding: const EdgeInsets.all(AppTheme.spacing24),
+            child: Center(
+              child: Column(
+                children: [
+                  Icon(Icons.history, color: theme.colorScheme.outline.withOpacity(0.5), size: 48),
+                  const SizedBox(height: AppTheme.spacing16),
+                  Text(
+                    'Aucun transfert récent',
+                    style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.outline),
+                  ),
+                  Text(
+                    'Vos transferts apparaîtront ici',
+                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
-        const SizedBox(height: AppTheme.spacing8),
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }
@@ -351,25 +291,28 @@ class _HomeBottomNav extends StatelessWidget {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
     if (t == null) {
-      return Container(
+      return SizedBox(
         height: 80,
-        color: theme.colorScheme.surface,
-        child: const Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))),
+        child: Center(child: CircularProgressIndicator()),
       );
     }
     return NavigationBar(
       backgroundColor: theme.colorScheme.surface,
+      elevation: 0,
       destinations: [
         NavigationDestination(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home_outlined),
+          selectedIcon: Icon(Icons.home),
           label: t.bottomNavHome,
         ),
         NavigationDestination(
           icon: Icon(Icons.travel_explore),
+          selectedIcon: Icon(Icons.travel_explore),
           label: t.bottomNavDiscovery,
         ),
         NavigationDestination(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.person_outline),
+          selectedIcon: Icon(Icons.person),
           label: t.bottomNavMe,
         ),
       ],
