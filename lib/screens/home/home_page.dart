@@ -9,7 +9,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context);
-    if (t == null) return const SizedBox.shrink();
+    if (t == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),

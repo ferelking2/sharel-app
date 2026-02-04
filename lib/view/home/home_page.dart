@@ -118,7 +118,12 @@ class _HomeMainActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
-    if (t == null) return const SizedBox.shrink();
+    if (t == null) {
+      return const Padding(
+        padding: EdgeInsets.all(AppTheme.spacing24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -345,7 +350,13 @@ class _HomeBottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
-    if (t == null) return const SizedBox.shrink();
+    if (t == null) {
+      return Container(
+        height: 80,
+        color: theme.colorScheme.surface,
+        child: const Center(child: SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))),
+      );
+    }
     return NavigationBar(
       backgroundColor: theme.colorScheme.surface,
       destinations: [
