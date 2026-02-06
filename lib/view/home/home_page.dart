@@ -84,7 +84,7 @@ class HomePage extends ConsumerWidget {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                      color: theme.colorScheme.primary.withOpacity(0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -481,10 +481,10 @@ class _StatCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: AppTheme.spacing8),
-          Text(
+              Text(
             subtitle,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.outline.withValues(alpha: 0.7),
+              color: theme.colorScheme.outline.withOpacity(0.7),
             ),
           ),
         ],
