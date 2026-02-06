@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart';
 
 class PermissionService {
   static int _getAndroidVersion() {
@@ -7,6 +8,38 @@ class PermissionService {
       return int.tryParse(Platform.version.split('.').first) ?? 31;
     } catch (_) {
       return 31;
+    }
+  }
+
+  /// Request ALL FILES ACCESS (MANAGE_EXTERNAL_STORAGE)
+  /// This is the PRIMARY permission needed for SHAREL functionality
+  static Future<PermissionStatus> requestAllFilesAccess() async {
+    if (!Platform.isAndroid) {
+      debugPrint('[PermissionService] Host is not Android, skipping MANAGE_EXTERNAL_STORAGE');
+      return PermissionStatus.granted;
+    }
+
+    final version = _getAndroidVersion();
+    debugPrint('[PermissionService] Android version: $version');
+    
+    if (version >= 11) {
+      debugPrint('[PermissionService] Requesting MANAGE_EXTERNAL_STORAGE (Android 11+)...');
+      final status = await Permission.manageExternalStorage.request();
+      debugPrint('[PermissionService] MANAGE_EXTERNAL_STORAGE response: $status');
+      
+      if (status.isGranted) {
+        debugPrint('[PermissionService] ✓ MANAGE_EXTERNAL_STORAGE granted');
+      } else if (status.isPermanentlyDenied) {
+        debugPrint('[PermissionService] ⚠️ MANAGE_EXTERNAL_STORAGE is permanently denied');
+      } else {
+        debugPrint('[PermissionService] ⚠️ MANAGE_EXTERNAL_STORAGE was denied');
+      }
+      return status;
+    } else {
+      debugPrint('[PermissionService] Requesting READ_EXTERNAL_STORAGE (Android ≤10)...');
+      final status = await Permission.storage.request();
+      debugPrint('[PermissionService] READ_EXTERNAL_STORAGE response: $status');
+      return status;
     }
   }
 
@@ -63,14 +96,13 @@ class PermissionService {
     if (Platform.isAndroid) {
       final version = _getAndroidVersion();
       
+      // ALL FILES ACCESS is PRIMARY requirement
+      perms['All Files Access'] = await Permission.manageExternalStorage.status;
+      
       if (version >= 13) {
         perms['Photos'] = await Permission.photos.status;
         perms['Videos'] = await Permission.videos.status;
         perms['Audio'] = await Permission.audio.status;
-      } else if (version >= 11) {
-        perms['Manage External Storage'] = await Permission.manageExternalStorage.status;
-      } else {
-        perms['Storage'] = await Permission.storage.status;
       }
       
       perms['Camera'] = await Permission.camera.status;
@@ -86,6 +118,15 @@ class PermissionService {
     }
     
     return perms;
+  }
+
+  /// Check if ALL FILES ACCESS is granted (critical for SHAREL)
+  static Future<bool> isAllFilesAccessGranted() async {
+    if (!Platform.isAndroid) return true;
+    if (_getAndroidVersion() < 11) return true;
+    
+    final status = await Permission.manageExternalStorage.status;
+    return status.isGranted;
   }
 
   /// Check if storage permission is granted
@@ -128,6 +169,7 @@ class PermissionService {
   /// Helper to get user-friendly permission name
   static String getPermissionLabel(String key) {
     final labels = {
+      'All Files Access': 'Accès à tous les fichiers',
       'Storage': 'Stockage',
       'Photos': 'Photos',
       'Videos': 'Vidéos',
