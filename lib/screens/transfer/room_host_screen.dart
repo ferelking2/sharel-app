@@ -19,9 +19,11 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
   @override
   void initState() {
     super.initState();
+    debugPrint('[RoomHostScreen] Initializing...');
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final selection = ref.read(selectionProvider);
       if (selection.isEmpty) {
+        debugPrint('[RoomHostScreen] No items selected - returning');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Aucun élément sélectionné')),
@@ -31,17 +33,33 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
         return;
       }
       
-      final uri = await ref.read(transferProvider.notifier).startHost(selection);
-      if (mounted) {
-        setState(() {
-          _uri = uri;
-        });
+      debugPrint('[RoomHostScreen] Starting host with ${selection.length} items');
+      try {
+        final uri = await ref.read(transferProvider.notifier).startHost(selection);
+        if (mounted) {
+          setState(() {
+            _uri = uri;
+          });
+          debugPrint('[RoomHostScreen] Host started on: $uri');
+        }
+      } catch (e) {
+        debugPrint('[RoomHostScreen] Error starting host: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erreur: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          Navigator.pop(context);
+        }
       }
     });
   }
 
   @override
   void dispose() {
+    debugPrint('[RoomHostScreen] Stopping host...');
     ref.read(transferProvider.notifier).stopHost();
     super.dispose();
   }
@@ -67,87 +85,99 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
     final selection = ref.watch(selectionProvider);
     final isMobile = MediaQuery.of(context).size.width < 600;
 
-    return Scaffold(
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          debugPrint('[RoomHostScreen] Popped - stopping host');
+        }
+      },
+      child: Scaffold(
         appBar: AppBar(
           title: const Text('Créer une room'),
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                debugPrint('[RoomHostScreen] Back button pressed');
+                Navigator.pop(context);
+              }
+            },
           ),
         ),
-      body: _uri == null
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
+        body: _uri == null
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3,
+                        valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text('Démarrage du serveur...', style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Veuillez patienter',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.outline),
-                  ),
-                ],
-              ),
-            )
-          : SingleChildScrollView(
-              padding: EdgeInsets.all(isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Success badge
-                  Container(
-                    padding: EdgeInsets.all(AppTheme.spacing16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.colorScheme.secondary.withOpacity(0.12),
-                          theme.colorScheme.secondary.withOpacity(0.04),
+                    const SizedBox(height: 24),
+                    Text('Démarrage du serveur...', style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Veuillez patienter',
+                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.outline),
+                    ),
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                padding: EdgeInsets.all(isMobile ? AppTheme.spacing16 : AppTheme.spacing24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Success badge
+                    Container(
+                      padding: EdgeInsets.all(AppTheme.spacing16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          colors: [
+                            theme.colorScheme.secondary.withValues(alpha: 0.12),
+                            theme.colorScheme.secondary.withValues(alpha: 0.04),
+                          ],
+                        ),
+                        border: Border.all(color: theme.colorScheme.secondary.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(AppTheme.spacing12),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: theme.colorScheme.secondary.withValues(alpha: 0.2),
+                            ),
+                            child: Icon(Icons.check_circle, color: theme.colorScheme.secondary, size: 28),
+                          ),
+                          const SizedBox(width: AppTheme.spacing16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Serveur actif', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                                SizedBox(height: AppTheme.spacing8),
+                                Text('En attente de clients...', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline)),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                      border: Border.all(color: theme.colorScheme.secondary.withOpacity(0.3)),
                     ),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(AppTheme.spacing12),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: theme.colorScheme.secondary.withOpacity(0.2),
-                          ),
-                          child: Icon(Icons.check_circle, color: theme.colorScheme.secondary, size: 28),
-                        ),
-                        const SizedBox(width: AppTheme.spacing16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Serveur actif', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                              SizedBox(height: AppTheme.spacing8),
-                              Text('En attente de clients...', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.outline)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
 
-                  SizedBox(height: AppTheme.spacing32),
+                    SizedBox(height: AppTheme.spacing32),
 
-                  // QR / Address preview (compat fallback)
-                  Text('Code QR', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                  SizedBox(height: AppTheme.spacing12),
-                  Center(
+                    // QR / Address preview (compat fallback)
+                    Text('Code QR', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                    SizedBox(height: AppTheme.spacing12),
+                    Center(
                     child: Container(
                       padding: EdgeInsets.all(AppTheme.spacing16),
                       decoration: BoxDecoration(
@@ -155,7 +185,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                         color: theme.colorScheme.surface,
                         boxShadow: [
                           BoxShadow(
-                            color: theme.colorScheme.primary.withOpacity(0.06),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.06),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -188,10 +218,10 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: theme.colorScheme.surface,
-                      border: Border.all(color: theme.colorScheme.outline.withOpacity(0.15)),
+                      border: Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.15)),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withOpacity(0.08),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.08),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -227,8 +257,8 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                     padding: EdgeInsets.all(AppTheme.spacing16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: theme.colorScheme.primaryContainer.withOpacity(0.15),
-                      border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
+                      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.15),
+                      border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
                     ),
                     child: Row(
                       children: [
@@ -236,7 +266,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                           padding: EdgeInsets.all(AppTheme.spacing8),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: theme.colorScheme.primary.withOpacity(0.2),
+                            color: theme.colorScheme.primary.withValues(alpha: 0.2),
                           ),
                           child: Icon(Icons.folder, color: theme.colorScheme.primary),
                         ),
@@ -259,7 +289,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                     padding: EdgeInsets.all(AppTheme.spacing16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: theme.colorScheme.secondaryContainer.withOpacity(0.1),
+                      color: theme.colorScheme.secondaryContainer.withValues(alpha: 0.1),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +307,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                             child: LinearProgressIndicator(
                               value: state.progress,
                               minHeight: 6,
-                              backgroundColor: theme.colorScheme.outline.withOpacity(0.2),
+                              backgroundColor: theme.colorScheme.outline.withValues(alpha: 0.2),
                               valueColor: AlwaysStoppedAnimation(theme.colorScheme.primary),
                             ),
                           ),
@@ -290,6 +320,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
                 ],
               ),
             ),
+      ),
     );
   }
 }

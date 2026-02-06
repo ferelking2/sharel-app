@@ -8,7 +8,6 @@ class MePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final t = AppLocalizations.of(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -19,7 +18,6 @@ class MePage extends StatelessWidget {
             backgroundColor: theme.colorScheme.surface,
             elevation: 0,
             flexibleSpace: LayoutBuilder(builder: (context, constraints) {
-              final top = constraints.biggest.height;
               return Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -30,7 +28,7 @@ class MePage extends StatelessWidget {
                         image: DecorationImage(
                           image: AssetImage('assets/cover_placeholder.jpg'),
                           fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.12), BlendMode.dstATop),
+                          colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.12), BlendMode.dstATop),
                         ),
                       ),
                     ),
@@ -61,7 +59,7 @@ class MePage extends StatelessWidget {
                             color: theme.colorScheme.surface,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.12),
+                                color: Colors.black.withValues(alpha: 0.12),
                                 blurRadius: 12,
                                 offset: const Offset(0, 6),
                               ),
@@ -165,7 +163,7 @@ class MePage extends StatelessWidget {
 
                         Card(
                           child: ListTile(
-                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withOpacity(0.08), child: Icon(Icons.settings, color: theme.colorScheme.primary)),
+                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.08), child: Icon(Icons.settings, color: theme.colorScheme.primary)),
                             title: Text('Général'),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {},
@@ -174,7 +172,7 @@ class MePage extends StatelessWidget {
                         const SizedBox(height: AppTheme.spacing8),
                         Card(
                           child: ListTile(
-                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withOpacity(0.08), child: Icon(Icons.tune, color: theme.colorScheme.primary)),
+                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.08), child: Icon(Icons.tune, color: theme.colorScheme.primary)),
                             title: Text('Préférences'),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {},
@@ -183,7 +181,7 @@ class MePage extends StatelessWidget {
                         const SizedBox(height: AppTheme.spacing8),
                         Card(
                           child: ListTile(
-                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withOpacity(0.08), child: Icon(Icons.lock, color: theme.colorScheme.primary)),
+                            leading: CircleAvatar(backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.08), child: Icon(Icons.lock, color: theme.colorScheme.primary)),
                             title: Text('Confidentialité et sécurité'),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () {},

@@ -57,7 +57,7 @@ class _SelectedItemsExpansionState extends State<SelectedItemsExpansion> {
             ),
             if (_isExpanded) ...[
               SizedBox(height: AppTheme.spacing12),
-              Divider(color: theme.colorScheme.primary.withOpacity(0.2)),
+              Divider(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
               SizedBox(height: AppTheme.spacing12),
               SizedBox(
                 height: 150,

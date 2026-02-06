@@ -35,21 +35,18 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
-    return WillPopScope(
-      onWillPop: () async {
-        final nav = Navigator.of(context);
-        if (nav.canPop()) {
-          nav.pop();
-          return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (!didPop && Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
         }
-        // prevent app from closing on back press at root
-        return false;
       },
       child: Scaffold(
         body: widget.child,
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: theme.colorScheme.outline.withOpacity(0.1))),
+            border: Border(top: BorderSide(color: theme.colorScheme.outline.withValues(alpha: 0.1))),
           ),
           child: NavigationBar(
             backgroundColor: theme.colorScheme.surface,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:sharel_app/model/selected_item.dart';
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
@@ -27,7 +28,6 @@ class ShareEngine {
   Future<Map<int, String>> _computeHashes() async {
     final hashes = <int, String>{};
     for (int i = 0; i < items.length; i++) {
-      final item = items[i];
       try {
         // Simplified: compute hash for files only
         // In production, use proper file I/O
@@ -45,14 +45,18 @@ class ShareEngine {
       _hashCache = await _computeHashes();
       
       // Start HTTP server on any IPv4
+      debugPrint('[ShareEngine] Binding server to anyIPv4:0...');
       _server = await HttpServer.bind(InternetAddress.anyIPv4, 0);
       port = _server!.port;
+      debugPrint('[ShareEngine] Server bound to port $port');
       
       // Find local IP address
       localIP = await _getLocalIP();
+      debugPrint('[ShareEngine] Local IP detected: $localIP');
       
       // Start listening for requests
       _server!.listen(_handleRequest);
+      debugPrint('[ShareEngine] Listening for requests...');
 
       // Quick self-check: verify the server responds to /session locally.
       // This helps detect binding/networking issues early (throws on failure).
@@ -77,21 +81,15 @@ class ShareEngine {
       if (!ok) {
         // if the self-check fails, stop the server and throw
         await stop();
+        debugPrint('[ShareEngine] ERROR: Self-check failed - /session not reachable');
         throw Exception('ShareEngine self-check failed: /session not reachable');
       }
       
-      // debug print when in debug mode only
-      assert(() {
-        // ignore: avoid_print
-        print('[ShareEngine] Started on http://$localIP:$port (token: ${sessionToken.substring(0, 8)}...)');
-        return true;
-      }());
+      debugPrint('[ShareEngine] ✓ Successfully started on http://$localIP:$port');
+      debugPrint('[ShareEngine] Session token: ${sessionToken.substring(0, 8)}...');
+      debugPrint('[ShareEngine] Items count: ${items.length}');
     } catch (e) {
-      assert(() {
-        // ignore: avoid_print
-        print('[ShareEngine] Error: $e');
-        return true;
-      }());
+      debugPrint('[ShareEngine] ✗ CRITICAL ERROR during startup: $e');
       rethrow;
     }
   }

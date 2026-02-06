@@ -141,11 +141,11 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                 borderRadius: BorderRadius.circular(16),
                 gradient: LinearGradient(
                   colors: [
-                    theme.colorScheme.primary.withOpacity(0.12),
-                    theme.colorScheme.primary.withOpacity(0.04),
+                    theme.colorScheme.primary.withValues(alpha: 0.12),
+                    theme.colorScheme.primary.withValues(alpha: 0.04),
                   ],
                 ),
-                border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
+                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
               ),
               child: Row(
                 children: [
@@ -197,11 +197,11 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                     padding: EdgeInsets.all(AppTheme.spacing16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      color: theme.colorScheme.primaryContainer.withOpacity(0.15),
-                      border: Border.all(color: theme.colorScheme.primary.withOpacity(0.2)),
+                      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.15),
+                      border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.2)),
                       boxShadow: [
                         BoxShadow(
-                          color: theme.colorScheme.primary.withOpacity(0.08),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.08),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -216,7 +216,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                               padding: EdgeInsets.all(AppTheme.spacing8),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: theme.colorScheme.primary.withOpacity(0.2),
+                                color: theme.colorScheme.primary.withValues(alpha: 0.2),
                               ),
                               child: Icon(Icons.cloud, color: theme.colorScheme.primary),
                             ),

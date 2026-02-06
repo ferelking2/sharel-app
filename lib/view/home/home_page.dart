@@ -77,14 +77,14 @@ class HomePage extends ConsumerWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      theme.colorScheme.primary.withOpacity(0.2),
-                      theme.colorScheme.secondary.withOpacity(0.1),
+                      theme.colorScheme.primary.withValues(alpha: 0.2),
+                      theme.colorScheme.secondary.withValues(alpha: 0.1),
                     ],
                   ),
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: theme.colorScheme.primary.withOpacity(0.3),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -140,8 +140,8 @@ class HomePage extends ConsumerWidget {
                 color: theme.colorScheme.primary,
                 gradient: LinearGradient(
                     colors: [
-                    theme.colorScheme.primary.withOpacity(0.15),
-                    theme.colorScheme.primary.withOpacity(0.05),
+                    theme.colorScheme.primary.withValues(alpha: 0.15),
+                    theme.colorScheme.primary.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -160,8 +160,8 @@ class HomePage extends ConsumerWidget {
                 color: theme.colorScheme.secondary,
                 gradient: LinearGradient(
                     colors: [
-                    theme.colorScheme.secondary.withOpacity(0.15),
-                    theme.colorScheme.secondary.withOpacity(0.05),
+                    theme.colorScheme.secondary.withValues(alpha: 0.15),
+                    theme.colorScheme.secondary.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -180,8 +180,8 @@ class HomePage extends ConsumerWidget {
                 color: theme.colorScheme.tertiary,
                 gradient: LinearGradient(
                     colors: [
-                    theme.colorScheme.tertiary.withOpacity(0.15),
-                    theme.colorScheme.tertiary.withOpacity(0.05),
+                    theme.colorScheme.tertiary.withValues(alpha: 0.15),
+                    theme.colorScheme.tertiary.withValues(alpha: 0.05),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -260,19 +260,19 @@ class HomePage extends ConsumerWidget {
             borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
               colors: [
-                theme.colorScheme.primary.withOpacity(0.08),
-                theme.colorScheme.secondary.withOpacity(0.04),
+                theme.colorScheme.primary.withValues(alpha: 0.08),
+                theme.colorScheme.secondary.withValues(alpha: 0.04),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
             border: Border.all(
-              color: theme.colorScheme.outline.withOpacity(0.15),
+              color: theme.colorScheme.outline.withValues(alpha: 0.15),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: theme.colorScheme.primary.withOpacity(0.08),
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
                 blurRadius: 24,
                 offset: const Offset(0, 8),
               ),
@@ -284,7 +284,7 @@ class HomePage extends ConsumerWidget {
               Icon(
                 Icons.history_rounded,
                 size: 56,
-                color: theme.colorScheme.primary.withOpacity(0.4),
+                color: theme.colorScheme.primary.withValues(alpha: 0.4),
               ),
               SizedBox(height: AppTheme.spacing16),
               Text(
@@ -298,7 +298,7 @@ class HomePage extends ConsumerWidget {
               Text(
                 'Vos transferts apparaîtront ici',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.outline.withOpacity(0.7),
+                  color: theme.colorScheme.outline.withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -362,17 +362,17 @@ class _ActionCardState extends State<_ActionCard> with SingleTickerProviderState
             borderRadius: BorderRadius.circular(20),
             gradient: widget.gradient,
             border: Border.all(
-              color: widget.color.withOpacity(0.2),
+              color: widget.color.withValues(alpha: 0.2),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: widget.color.withOpacity(0.15),
+                color: widget.color.withValues(alpha: 0.15),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
               BoxShadow(
-                color: widget.color.withOpacity(0.1),
+                color: widget.color.withValues(alpha: 0.1),
                 blurRadius: 32,
                 offset: const Offset(0, 12),
               ),
@@ -387,15 +387,15 @@ class _ActionCardState extends State<_ActionCard> with SingleTickerProviderState
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                     colors: [
-                      widget.color.withOpacity(0.25),
-                      widget.color.withOpacity(0.1),
+                      widget.color.withValues(alpha: 0.25),
+                      widget.color.withValues(alpha: 0.1),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: widget.color.withOpacity(0.2),
+                      color: widget.color.withValues(alpha: 0.2),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -443,19 +443,19 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           colors: [
-            color.withOpacity(0.12),
-            color.withOpacity(0.04),
+            color.withValues(alpha: 0.12),
+            color.withValues(alpha: 0.04),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         border: Border.all(
-          color: color.withOpacity(0.15),
+          color: color.withValues(alpha: 0.15),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -468,7 +468,7 @@ class _StatCard extends StatelessWidget {
             padding: EdgeInsets.all(AppTheme.spacing8),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
             ),
             child: Icon(icon, color: color, size: 20),
           ),
@@ -484,7 +484,7 @@ class _StatCard extends StatelessWidget {
               Text(
             subtitle,
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.outline.withOpacity(0.7),
+              color: theme.colorScheme.outline.withValues(alpha: 0.7),
             ),
           ),
         ],
