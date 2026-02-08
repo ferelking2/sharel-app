@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../viewmodel/selection_viewmodel.dart';
+import '../../providers/role_provider.dart';
 import '../../widgets/selected_items_expansion.dart';
 import 'tabs/contacts_tab.dart';
 import 'tabs/files_tab.dart';
@@ -46,7 +47,11 @@ class _SenderPageState extends ConsumerState<SenderPage>
         foregroundColor: theme.colorScheme.onPrimary,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              }
+            },
           ),
         bottom: TabBar(
           controller: _tabController,
@@ -90,9 +95,7 @@ class _SenderPageState extends ConsumerState<SenderPage>
                   Text('$selectedCount sélectionné(s)'),
                   ElevatedButton(
                     onPressed: () {
-                      // Naviguer vers l'écran de préparation du transfert
-                      // la sélection est partagée via `selectionProvider`
-                      context.go('/transfer/preparation');
+                      context.push('/transfer/preparation', extra: TransferRole.sender);
                     },
                     child: const Text('Envoyer'),
                   ),

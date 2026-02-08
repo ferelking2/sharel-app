@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/design_system.dart';
 
 class ReceiverPage extends StatefulWidget {
@@ -34,7 +35,11 @@ class _ReceiverPageState extends State<ReceiverPage> {
         foregroundColor: theme.colorScheme.onPrimary,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              }
+            },
           ),
       ),
       body: _isLoading ? _buildLoading() : _buildContent(),

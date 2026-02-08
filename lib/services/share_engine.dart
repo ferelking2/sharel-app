@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:sharel_app/model/selected_item.dart';
 import 'package:sharel_app/services/storage_service.dart';
+import 'package:sharel_app/services/logger_service.dart';
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,10 +29,11 @@ class ShareEngine {
 
   Future<void> _log(String message) async {
     debugPrint('[ShareEngine] $message');
+    LoggerService.log(message, component: 'ShareEngine');
     try {
       await StorageService().writeLog('transfer', message);
     } catch (_) {
-      // Fail silently if logging fails
+      // Fail silently if file logging fails
     }
   }
 
@@ -98,8 +100,10 @@ class ShareEngine {
       }
       
       await _log('✓ Successfully started on http://$localIP:$port');
+      await _log('Session ID: $sessionId');
       await _log('Session token: ${sessionToken.substring(0, 8)}...');
       await _log('Items count: ${items.length}');
+      await _log('[SERVER_READY] Server is ready to receive connections at http://$localIP:$port/session?token=$sessionToken');
     } catch (e) {
       await _log('✗ CRITICAL ERROR during startup: $e');
       rethrow;
@@ -167,6 +171,7 @@ class ShareEngine {
           assert(() {
             // ignore: avoid_print
             print('[ShareEngine] Warning: /session accessed without valid token');
+            LoggerService.log('Warning: /session accessed without valid token', component: 'ShareEngine');
             return true;
           }());
         }
@@ -195,7 +200,7 @@ class ShareEngine {
             'hash': hash,
           };
         }).toList();
-        
+
         req.response.headers.contentType = ContentType.json;
         req.response.write(jsonEncode({
           'protocol': protocolVersion,
@@ -205,6 +210,7 @@ class ShareEngine {
           'items': meta,
         }));
         await req.response.close();
+        LoggerService.log('GET /session - ${items.length} items returned', component: 'ShareEngine');
         return;
       }
 
@@ -223,24 +229,27 @@ class ShareEngine {
               music: (m) => m.path,
               app: (a) => null,
             );
-            
+
             if (maybePath == null) {
+              LoggerService.log('GET /file/$idx - Item has no path (contact/app)', component: 'ShareEngine');
               req.response.statusCode = HttpStatus.notFound;
               await req.response.close();
               return;
             }
-            
+
             final file = File(maybePath);
             if (!file.existsSync()) {
+              LoggerService.log('GET /file/$idx - File not found: $maybePath', component: 'ShareEngine');
               req.response.statusCode = HttpStatus.notFound;
               await req.response.close();
               return;
             }
-            
+
             req.response.headers.set(HttpHeaders.contentTypeHeader, 'application/octet-stream');
             req.response.headers.set(HttpHeaders.contentLengthHeader, file.lengthSync().toString());
-            
+
             // Stream the file
+            LoggerService.log('GET /file/$idx - Streaming file: ${file.path} (${file.lengthSync()} bytes)', component: 'ShareEngine');
             await file.openRead().pipe(req.response);
             return;
           }
@@ -248,6 +257,7 @@ class ShareEngine {
       }
 
       // 404
+      LoggerService.log('GET $path - Not found', component: 'ShareEngine');
       req.response.statusCode = HttpStatus.notFound;
       req.response.write('Not found');
       await req.response.close();
@@ -255,6 +265,7 @@ class ShareEngine {
       assert(() {
         // ignore: avoid_print
         print('Request handler error: $e');
+        LoggerService.log('Error in request handler: $e', component: 'ShareEngine');
         return true;
       }());
       try {

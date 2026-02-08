@@ -31,7 +31,11 @@ class _QRScanScreenState extends State<QRScanScreen> {
           title: const Text('Scanner QR'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              }
+            },
           ),
         ),
       body: MobileScanner(

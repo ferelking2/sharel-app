@@ -25,10 +25,8 @@ class _ScanQrScreenState extends ConsumerState<ScanQrScreen> {
     if (barcodes.isEmpty) return;
     final raw = barcodes.first.rawValue ?? '';
     if (raw.isEmpty) return;
-    // Assume payload is the base URL (http://ip:port)
-    ref.read(targetServerProvider.notifier).state = raw.trim();
-    // Navigate to client screen
-    context.go('/transfer/client');
+    // Return the scanned URL back to the previous screen (join_room_screen)
+    Navigator.pop(context, raw.trim());
   }
 
   @override

@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import '../../view/home/home_page.dart';
 import '../../screens/sender/sender_page.dart';
 import '../../screens/transfer/preparation_screen.dart';
-import '../../screens/transfer/receiver_preparation_screen.dart';
 import '../../screens/transfer/discovery_screen.dart';
 import '../../screens/transfer/room_host_screen.dart';
 import '../../screens/transfer/join_room_screen.dart';
@@ -15,6 +14,7 @@ import '../../screens/notification/notification_center_page.dart';
 import '../../screens/me/me_page.dart';
 import '../../screens/discovery/discovery_page.dart';
 import '../../widgets/app_shell.dart';
+import '../../providers/role_provider.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -56,7 +56,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/transfer/preparation',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const PreparationScreen(),
+      builder: (context, state) {
+        final role = state.extra as TransferRole? ?? TransferRole.sender;
+        return PreparationScreen(role: role);
+      },
     ),
     GoRoute(
       path: '/transfer/host',
@@ -79,11 +82,6 @@ final appRouter = GoRouter(
       builder: (context, state) => const RoomClientScreen(),
     ),
     GoRoute(
-      path: '/receive/preparation',
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (context, state) => const ReceiverPreparationScreen(),
-    ),
-    GoRoute(
       path: '/transfer/discovery',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const DiscoveryScreen(),
@@ -100,3 +98,4 @@ final appRouter = GoRouter(
     ),
   ],
 );
+

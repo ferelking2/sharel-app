@@ -89,34 +89,47 @@ class PermissionService {
     return status;
   }
 
-  /// Get all required permissions status
-  static Future<Map<String, PermissionStatus>> getRequiredPermissions() async {
+  /// Get all required permissions status (with optional role filtering)
+  /// Sender (client) role skips Camera and All Files Access (already requested at startup)
+  /// Receiver (host) role includes all permissions
+  static Future<Map<String, PermissionStatus>> getRequiredPermissions({bool isSender = false}) async {
     final perms = <String, PermissionStatus>{};
-    
+
     if (Platform.isAndroid) {
       final version = _getAndroidVersion();
-      
-      // ALL FILES ACCESS is PRIMARY requirement
-      perms['All Files Access'] = await Permission.manageExternalStorage.status;
-      
+
+      // Receiver requests All Files Access; Sender skips (already requested at startup)
+      if (!isSender) {
+        perms['All Files Access'] = await Permission.manageExternalStorage.status;
+      }
+
       if (version >= 13) {
         perms['Photos'] = await Permission.photos.status;
         perms['Videos'] = await Permission.videos.status;
         perms['Audio'] = await Permission.audio.status;
       }
-      
-      perms['Camera'] = await Permission.camera.status;
+
+      // Only request Camera if specifically needed (receiver for QR scanning)
+      // Sender should request Camera only when opening QR scanner
+      if (!isSender) {
+        perms['Camera'] = await Permission.camera.status;
+      }
+
       perms['Contacts'] = await Permission.contacts.status;
-      
+
       if (version >= 13) {
         perms['Nearby Wifi Devices'] = await Permission.nearbyWifiDevices.status;
       }
     } else if (Platform.isIOS) {
       perms['Photos'] = await Permission.photos.status;
-      perms['Camera'] = await Permission.camera.status;
       perms['Contacts'] = await Permission.contacts.status;
+
+      // Only Camera for receiver (QR scanning)
+      if (!isSender) {
+        perms['Camera'] = await Permission.camera.status;
+      }
     }
-    
+
     return perms;
   }
 

@@ -168,7 +168,7 @@ class HomePage extends ConsumerWidget {
                 ),
                 onTap: () {
                   ref.read(transferRoleProvider.notifier).state = TransferRole.receiver;
-                  context.go('/receive/preparation');
+                  context.push('/transfer/preparation', extra: TransferRole.receiver);
                 },
               ),
             ),

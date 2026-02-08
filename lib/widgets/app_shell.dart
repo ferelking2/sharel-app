@@ -36,10 +36,13 @@ class _AppShellState extends State<AppShell> {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
     return PopScope(
-      canPop: false,
+      canPop: true,
       onPopInvoked: (didPop) async {
-        if (!didPop && Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
+        if (!didPop) {
+          // Use GoRouter's pop instead of Navigator.pop for better integration
+          if (context.canPop()) {
+            context.pop();
+          }
         }
       },
       child: Scaffold(

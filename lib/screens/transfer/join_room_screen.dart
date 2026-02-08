@@ -26,7 +26,11 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
           title: const Text('Rejoindre une room'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              }
+            },
           ),
         ),
       body: Padding(
@@ -41,7 +45,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
                 final val = _ctrl.text.trim();
                 if (val.isNotEmpty) {
                   ref.read(targetServerProvider.notifier).state = val;
-                  context.go('/transfer/client');
+                  context.push('/transfer/client');
                 }
               },
               child: const Text('Se connecter'),
@@ -54,7 +58,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
                   _ctrl.text = result;
                   ref.read(targetServerProvider.notifier).state = result;
                   if (mounted) {
-                    context.go('/transfer/client');
+                    context.push('/transfer/client');
                   }
                 }
               },

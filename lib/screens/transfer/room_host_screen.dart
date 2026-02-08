@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 // qr_flutter removed for compatibility with multiple package versions
 import '../../core/theme/design_system.dart';
 import '../../viewmodel/selection_viewmodel.dart';
@@ -28,7 +29,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Aucun élément sélectionné')),
           );
-          Navigator.pop(context);
+          context.pop();
         }
         return;
       }
@@ -51,7 +52,7 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
               backgroundColor: Colors.red,
             ),
           );
-          Navigator.pop(context);
+          context.pop();
         }
       }
     });
@@ -99,9 +100,9 @@ class _RoomHostScreenState extends ConsumerState<RoomHostScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (Navigator.canPop(context)) {
+              if (context.canPop()) {
                 debugPrint('[RoomHostScreen] Back button pressed');
-                Navigator.pop(context);
+                context.pop();
               }
             },
           ),
