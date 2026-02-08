@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:sharel_app/services/storage_service.dart';
-import 'package:sharel_app/model/selected_item.dart';
 
 /// Service pour gérer la réception et l'organisation des fichiers
 class ReceivedFilesService {

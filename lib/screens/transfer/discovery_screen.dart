@@ -246,7 +246,7 @@ class _DiscoveryScreenState extends ConsumerState<DiscoveryScreen> {
                     ),
                   ),
                 );
-              }).toList(),
+              },
               SizedBox(height: AppTheme.spacing24),
             ],
 

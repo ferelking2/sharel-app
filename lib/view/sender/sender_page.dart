@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../viewmodel/selection_viewmodel.dart';
 import '../../providers/role_provider.dart';
 import '../../core/theme/design_system.dart';
-import '../../widgets/selected_items_expansion.dart';
 import 'tabs/contacts_tab.dart';
 import 'tabs/files_tab.dart';
 import 'tabs/videos_tab.dart';
@@ -39,7 +38,6 @@ class _SenderPageState extends ConsumerState<SenderPage>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final selectedCount = ref.watch(selectionProvider).length;
-    final selection = ref.watch(selectionProvider);
 
     return Scaffold(
       backgroundColor: AppColors.surfaceLight,

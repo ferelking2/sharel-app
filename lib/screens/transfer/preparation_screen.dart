@@ -37,8 +37,8 @@ class PreparationScreen extends ConsumerWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
+                if (context.canPop()) {
+                  context.pop();
                 }
               },
             ),
@@ -64,8 +64,8 @@ class PreparationScreen extends ConsumerWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
+              if (context.canPop()) {
+                context.pop();
               }
             },
           ),
@@ -334,8 +334,6 @@ class _PermissionItem extends ConsumerWidget {
             duration: const Duration(seconds: 2),
           ),
         );
-        // Refresh permissions state
-        ref.refresh(requiredPermissionsProvider);
       }
     } catch (e) {
       debugPrint('[_PermissionItem] Error requesting permission: $e');

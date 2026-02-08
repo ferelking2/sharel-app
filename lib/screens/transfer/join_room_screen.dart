@@ -54,10 +54,11 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
             ElevatedButton.icon(
               onPressed: () async {
                 final result = await context.push<String>('/transfer/scan');
-                if (result != null) {
+                if (result != null && mounted) {
                   _ctrl.text = result;
                   ref.read(targetServerProvider.notifier).state = result;
                   if (mounted) {
+                    // ignore: use_build_context_synchronously
                     context.push('/transfer/client');
                   }
                 }

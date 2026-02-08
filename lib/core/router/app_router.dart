@@ -13,6 +13,7 @@ import '../../screens/files/files_page.dart';
 import '../../screens/notification/notification_center_page.dart';
 import '../../screens/me/me_page.dart';
 import '../../screens/discovery/discovery_page.dart';
+import '../../screens/onboarding/welcome_page.dart';
 import '../../widgets/app_shell.dart';
 import '../../providers/role_provider.dart';
 
@@ -26,6 +27,10 @@ final appRouter = GoRouter(
     body: Center(child: Text('Route not found: ${state.error}')),
   ),
   routes: [
+    GoRoute(
+      path: '/welcome',
+      builder: (context, state) => const WelcomePage(),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) => AppShell(child: child),

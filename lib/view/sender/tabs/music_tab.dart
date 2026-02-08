@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:on_audio_query/on_audio_query.dart';
-import '../../../core/theme/design_system.dart';
 import '../../../viewmodel/music_viewmodel.dart';
-import '../../../viewmodel/selection_viewmodel.dart';
-import '../../../model/selected_item.dart';
-
 class MusicTab extends StatefulWidget {
   const MusicTab({super.key});
 
@@ -24,8 +19,6 @@ class _MusicTabState extends State<MusicTab>
     return Consumer(
       builder: (context, ref, child) {
         final musicState = ref.watch(musicProvider);
-        final selection = ref.watch(selectionProvider);
-        final selectionNotifier = ref.read(selectionProvider.notifier);
 
         if (musicState.isLoading) {
           return const Center(child: CircularProgressIndicator());

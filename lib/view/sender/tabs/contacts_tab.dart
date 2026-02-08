@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/design_system.dart';
 import '../../../viewmodel/contacts_viewmodel.dart';
 import '../../../viewmodel/selection_viewmodel.dart';
 import '../../../model/selected_item.dart';

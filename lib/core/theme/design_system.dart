@@ -63,12 +63,10 @@ class AppTheme {
 
   static ThemeData lightTheme = FlexThemeData.light(
     colors: lightScheme,
-    useMaterial3: true,
     appBarStyle: FlexAppBarStyle.primary,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'Roboto',
   ).copyWith(
-    useMaterial3: true,
     scaffoldBackgroundColor: AppColors.surfaceLight,
     cardTheme: CardThemeData(
       elevation: elevation,
@@ -109,7 +107,6 @@ class AppTheme {
 
   static ThemeData darkTheme = FlexThemeData.dark(
     colors: darkScheme,
-    useMaterial3: true,
     appBarStyle: FlexAppBarStyle.primary,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     fontFamily: 'Roboto',

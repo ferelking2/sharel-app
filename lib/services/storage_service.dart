@@ -257,7 +257,7 @@ class StorageService {
     try {
       final logsDir = getLogsDir();
       final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').split('.')[0];
-      final logFile = File('${logsDir.path}/sharel_$tag\_$timestamp.log');
+      final logFile = File('${logsDir.path}/sharel_${tag}_$timestamp.log');
       
       if (!logFile.existsSync()) {
         await logFile.create(recursive: true);
@@ -275,7 +275,7 @@ class StorageService {
     try {
       final logsDir = getLogsDir();
       final today = DateTime.now().toIso8601String().split('T')[0];
-      final logFile = File('${logsDir.path}/sharel_$tag\_$today.log');
+      final logFile = File('${logsDir.path}/sharel_${tag}_$today.log');
       
       final timestamp = DateTime.now().toIso8601String();
       final logLine = '[$timestamp] $message\n';

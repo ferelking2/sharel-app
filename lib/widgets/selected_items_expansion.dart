@@ -98,6 +98,7 @@ class _SelectedItemsExpansionState extends State<SelectedItemsExpansion> {
   }
 
   IconData _getItemIcon(SelectedItem item) {
+      // ignore: unnecessary_underscores
       return item.when(
       contact: (_, __, ___) => Icons.person,
       file: (path, name, size) => Icons.insert_drive_file,
@@ -109,6 +110,7 @@ class _SelectedItemsExpansionState extends State<SelectedItemsExpansion> {
   }
 
   String _getItemName(SelectedItem item) {
+    // ignore: unnecessary_underscores
     return item.when(
       contact: (_, name, __) => name,
       file: (path, name, size) => name,

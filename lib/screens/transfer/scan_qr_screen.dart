@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../viewmodel/transfer_viewmodel.dart';
 
 class ScanQrScreen extends ConsumerStatefulWidget {
   const ScanQrScreen({super.key});
@@ -26,7 +25,9 @@ class _ScanQrScreenState extends ConsumerState<ScanQrScreen> {
     final raw = barcodes.first.rawValue ?? '';
     if (raw.isEmpty) return;
     // Return the scanned URL back to the previous screen (join_room_screen)
-    Navigator.pop(context, raw.trim());
+    if (context.mounted) {
+      context.pop(raw.trim());
+    }
   }
 
   @override
